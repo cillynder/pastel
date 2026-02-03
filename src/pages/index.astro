@@ -12,11 +12,14 @@ import PillContainer from '../components/PillContainer.astro';
 const devicon = (name: string, variant: string = "original") =>
     `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${name}/${name}-${variant}.svg`;
 
-const email = Astro.url.hostname == "cilly.moe" ? "mini@cilly.moe" : "me@cilly.dev"
-
 ---
 
 <script>
+    const email = location.hostname == "localhost" ? "mini@cilly.moe" : "me@cilly.dev"
+    const emailEle = document.getElementById("email-text")!
+    emailEle.textContent = email;
+    emailEle.closest("a")!.href = "mailto:" + email;
+
     const fmt = new Intl.DateTimeFormat("en-AU", {
         timeZone: "Australia/Melbourne",
         hourCycle: "h23",
@@ -42,8 +45,9 @@ const email = Astro.url.hostname == "cilly.moe" ? "mini@cilly.moe" : "me@cilly.d
                     <div class="flex flex-col gap-2">
                         <h1 class="text-4xl font-semibold">Cilly Leang</h1>
                         <PillContainer>
-                            <Pill text={email} url={"mailto:" + email}>
+                            <Pill url="mailto:me@cilly.dev">
                                 <Mail class="size-6 fill-black" slot="icon" />
+                                <p class="font-semibold" id="email-text" slot="text">me@cilly.dev</p>
                             </Pill>
                             <Pill icon={devicon("github")} text="GitHub" url="https://github.com/cillynder" />
                         </PillContainer>
