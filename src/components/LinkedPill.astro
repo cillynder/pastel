@@ -1,0 +1,18 @@
+---
+import Pill from './Pill.astro';
+
+interface Props {
+    mono?: boolean;
+    icon?: string;
+    text?: string;
+    url: string;
+}
+
+const { mono = false, icon, text, url } = Astro.props;
+
+---
+    <Pill mono={mono} icon={icon} text={text} colour="pink">
+        <slot name="icon" slot="icon"/>
+        <slot name="text" slot="text"/>
+    </Pill>
+</a>

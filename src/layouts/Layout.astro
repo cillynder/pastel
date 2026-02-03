@@ -3,21 +3,22 @@ import "../styles/global.css";
 
 interface Props {
     title?: string;
+    class?: string;
 }
 
-const { title = "Cilly's Website" } = Astro.props;
+const { title = "cilly", class: className } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-                <link rel="icon" type="image/svg+xml" href="/hifumi-main.png" />
-		<meta name="generator" content={Astro.generator} />
-                <title>{title}</title>
-	</head>
-	<body class="bg-white h-screen w-screen">
-		<slot />
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/avatar.jpg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+    </head>
+    <body class={"h-screen w-screen " + className}>
+        <slot />
+    </body>
 </html>

@@ -35,6 +35,11 @@ import Layout from "../layouts/Layout.astro";
         track: Track,
     }
 
+    interface Recent {
+        endTime: string,
+        track: Track,
+    }
+
     interface Track {
         albums: Album[],
         artists: Artist[],
@@ -62,12 +67,13 @@ import Layout from "../layouts/Layout.astro";
     let progress = -1;
     let length = 0;
     let fetching = false;
+    let initialised = false;
     const currentlyPlaying = () => {
         if (fetching)
             return;
 
         fetching = true;
-        let promise;
+        let promise: Promise<any>;
         if (TESTING) {
             promise = new Promise<any>(r => r({"item":{"date":"2025-08-18T15:48:27.320Z","isPlaying":true,"progressMs":210000,"deviceName":"hyacinth","track":{"albums":[{"id":10474194,"image":"https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a9/e1/66/a9e16604-aad7-5de7-64ba-da4e1a52fd59/4562251593312_cover.jpg/768x768bb.jpg","name":"(un) jslkdfjasentimental spica"}],"artists":[{"id":452665,"name":"sana","image":"https://i.scdn.co/image/ab67616d00001e021e501d56ca2a5033b16c2185"}],"durationMs":221013,"explicit":false,"externalIds":{"spotify":["36L6q5vIxCHntJamOHoVcV"],"appleMusic":["1650355289"]},"id":55187378,"name":"Little Fighter","spotifyPopularity":12,"spotifyPreview":"https://p.scdn.co/mp3-preview/9c2fa19feb5ae3a75d153df0d2cf7fc7a49e025e?cid=d8a5ed958d274c2e8ee717e6a4b0971d","appleMusicPreview":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/30/34/aa/3034aad3-b13c-6854-d2f5-1e3999144915/mzaf_1589750817832948277.plus.aac.p.m4a"},"platform":"SPOTIFY"}}))
         } else {
@@ -75,18 +81,35 @@ import Layout from "../layouts/Layout.astro";
                 .then(res => res.json())
         }
         promise
-            .then(({ item: data }: { item: Current }) => {
-                const album = data.track.albums[0].name;
-                const albumCover = data.track.albums[0].image;
-                const artist = data.track.artists.map(a => a.name).join(", ");
-                const name = data.track.name;
-                paused = !data.isPlaying;
-                progress = Math.round(data.progressMs / 1000) - 1;
-                length = Math.round(data.track.durationMs / 1000);
+            .then(async ({ item: data }: { item: Current | null }) => {
+                let track = data?.track;
+                if (track === null || track === undefined) {
+                    if (!initialised) {
+                        initialised = true;
+                        const dat = await fetch("https://api.stats.fm/api/v1/users/cillyleang/streams/recent?limit=1")
+                            .then(r => r.json()) as { items: Recent[] };
+                        track = dat.items[0].track;
+                        paused = true;
+                        progress = 0;
+                    } else {
+                        return 
+                    }
+                } else {
+                    paused = !data.isPlaying;
+                    progress = Math.round(data.progressMs / 1000) - 1;
+                }
+
+                length = Math.round(track.durationMs / 1000);
+
+                const album = track.albums[0].name;
+                const albumCover = track.albums[0].image;
+                const artist = track.artists.map(a => a.name).join(", ");
+                const name = track.name;
                 document.getElementById("track-name")!.textContent = name;
                 document.getElementById("track-artist")!.textContent = artist;
                 document.getElementById("track-album")!.textContent = album;
                 (document.getElementById("track-album-cover") as HTMLImageElement).src = albumCover;
+                (document.getElementById("track-album-cover") as HTMLImageElement).style.display = "block";
                 document.getElementById("track-isplaying")!.textContent = paused ? "Paused" : "Now Playing";
 
                 fetching = false;
@@ -99,7 +122,7 @@ import Layout from "../layouts/Layout.astro";
     currentlyPlaying();
 
     const incrementTrack = () => {
-        if (progress == -1 || length == 0)
+        if (progress === -1 || length === 0)
             return;
 
         if (!paused)
@@ -168,7 +191,7 @@ import Layout from "../layouts/Layout.astro";
                     </div>
                     <div class="flex flex-1 flex-col w-full px-2 justify-center">
                         <div class="flex flex-row space-x-2">
-                            <img class="size-11 m-1 ml-0 aspect-square" id="track-album-cover" />
+                            <img class="size-11 m-1 ml-0 aspect-square hidden" id="track-album-cover" />
                             <div class="flex flex-1 flex-col items-end w-full min-w-0">
                                 <p class="text-xs text-right w-full text-nowrap overflow-hidden overflow-ellipsis" id="track-name" />
                                 <p class="text-xs text-right w-full text-nowrap overflow-hidden overflow-ellipsis" id="track-artist" />
@@ -180,8 +203,8 @@ import Layout from "../layouts/Layout.astro";
                                 <div class="absolute text-xs bg-cyan h-full shadow-xs shadow-cyan/100 rounded-sm" id="track-prog-bar" />
                         </div>
                         <div class="flex flex-row w-full mt-1 justify-between">
-                            <p class="text-xs" id="track-prog-elapsed">hi</p>
-                            <p class="text-xs" id="track-prog-remaining">hi</p>
+                            <p class="text-xs" id="track-prog-elapsed" />
+                            <p class="text-xs" id="track-prog-remaining" />
                         </div>
                     </div>
                 </div>

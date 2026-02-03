@@ -1,6 +1,8 @@
 ---
 import Clock from '@material-symbols/svg-400/rounded/schedule-fill.svg';
+import Key from '@material-symbols/svg-400/rounded/key-fill.svg';
 import Location from '@material-symbols/svg-400/rounded/location_on-fill.svg';
+import Mail from '@material-symbols/svg-400/rounded/mail-fill.svg';
 
 import Pill from '../components/Pill.astro';
 import Section from '../components/Section.astro';
@@ -12,72 +14,109 @@ const devicon = (name: string, variant: string = "original") =>
 ---
 
 <script>
+    const fmt = new Intl.DateTimeFormat("en-AU", {
+        timeZone: "Australia/Melbourne",
+        hourCycle: "h23",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short",
+    })
     const refresh = () => {
         let time = new Date();
         let element = document.getElementById("clock-text")!;
-        element.textContent = time.toLocaleTimeString([], { timeZone: "Australia/Melbourne", hour: "numeric", minute: "numeric" });
+        element.textContent = fmt.format(time);
     };
     setInterval(refresh, 1000);
     refresh();
 </script>
 
-<Layout>
-    <div class="flex flex-col items-center p-8 space-y-4">
-        <Section>
-            <div class="flex flex-row space-x-4 items-center">
-                <img class="size-24 rounded-full" src="/hifumi-main.png">
-                <div class="flex flex-col gap-2">
-                    <h1 class="text-4xl font-semibold">Cilly Leang</h1>
+<Layout class="bg-gray">
+    <div class="grid place-items-center grid-cols-1 xl:grid-cols-2 xl:size-full xl:overflow-hidden">
+        <div class="flex flex-col items-center p-8 space-y-4 max-w-xl">
+            <Section>
+                <div class="flex flex-row space-x-4 items-center">
+                    <img class="size-24 rounded-full" src="/avatar.jpg">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="text-4xl font-semibold">Cilly Leang</h1>
+                        <PillContainer>
+                            <Pill text="me@cilly.dev" url="mailto:me@cilly.dev">
+                                <Mail class="size-6 fill-black" slot="icon" />
+                            </Pill>
+                            <Pill icon={devicon("github")} text="GitHub" url="https://github.com/cillynder" />
+                        </PillContainer>
+                    </div>
                 </div>
-            </div>
-        </Section>
-        <Section header="About">
-            <div class="flex flex-col space-y-2">
-                <p class="text-lg">
-                    19yo software developer. Likes reverse engineering and modding.
-                </p>
+            </Section>
+            <Section header="About">
+                <div class="flex flex-col">
+                    <p class="text-lg">
+                    Hi! I'm Cilly, a software developer. I love working with open source projects and
+                    modding or reverse engineering programs.
+                    <br><br>
+                    I specialise in Kotlin and TypeScript projects, but I have also been learning
+                    other languages such as Rust and C#.
+                    <br><br>
+                    Currently, I'm involved with the <a href="hi" class="text-black font-bold underline">Aliucord</a>
+                    project: a community effort to maintain the last working native version of Discord's Android app.
+                    </p>
+                    <div class="mt-4" />
+                    <PillContainer>
+                        <Pill text="Naarm/Melbourne">
+                            <Location class="size-6 fill-black" slot="icon" />
+                        </Pill>
+                        <Pill>
+                            <Clock class="size-6 fill-black" slot="icon" />
+                            <p class="font-semibold" id="clock-text" slot="text" />
+                        </Pill>
+                    </PillContainer>
+                    <PillContainer>
+                        <Pill text="GPG: 0x6500251E087653C9">
+                            <Key class="size-6 fill-black" slot="icon" />
+                        </Pill>
+                    </PillContainer>
+                </div>
+            </Section>
+        </div>
+        <div class="flex flex-col justify-center-safe p-8 space-y-4 xl:overflow-y-auto h-full">
+            <Section header="Languages">
                 <PillContainer>
-                    <Pill text="Naarm/Melbourne">
-                        <Location class="size-6 fill-black" slot="icon" />
-                    </Pill>
-                    <Pill>
-                        <Clock class="size-6 fill-black" slot="icon" />
-                        <p class="font-semibold" id="clock-text" slot="text" />
-                    </Pill>
+                    <Pill icon={devicon("nixos")} text="Nix" />
+                    <Pill icon={devicon("kotlin")} text="Kotlin" />
+                    <Pill icon={devicon("java")} text="Java" />
+                    <Pill icon={devicon("rust")} text="Rust" />
+                    <Pill icon={devicon("typescript")} text="TypeScript" />
+                    <Pill icon={devicon("javascript")} text="JavaScript" />
+                    <Pill icon={devicon("c")} text="C" />
+                    <Pill icon={devicon("cplusplus")} text="C++" />
+                    <Pill icon={devicon("csharp")} text="C#" />
                 </PillContainer>
-            </div>
-        </Section>
-        <Section header="Languages">
-            <PillContainer>
-                <Pill icon={devicon("nixos")} text="Nix" />
-                <Pill icon={devicon("kotlin")} text="Kotlin" />
-                <Pill icon={devicon("java")} text="Java" />
-                <Pill icon={devicon("rust")} text="Rust" />
-                <Pill icon={devicon("typescript")} text="TypeScript" />
-                <Pill icon={devicon("javascript")} text="JavaScript" />
-                <Pill icon={devicon("c")} text="C" />
-                <Pill icon={devicon("cplusplus")} text="C++" />
-                <Pill icon={devicon("csharp")} text="C#" />
-            </PillContainer>
-        </Section>
-        <Section header="Frameworks">
-            <PillContainer>
-                <Pill icon={devicon("jetpackcompose", "plain")} text="Compose" />
-                <Pill icon={devicon("astro")} text="Astro" />
-                <Pill mono={true} icon={devicon("react")} text="React" />
-            </PillContainer>
-        </Section>
-        <Section header="Technologies">
-            <PillContainer>
-                <Pill icon={devicon("linux")} text="Linux" />
-                <Pill icon={devicon("git")} text="Git" />
-                <Pill icon={devicon("android")} text="Android" />
-            </PillContainer>
-        </Section>
-        <Section header="Links">
-            <PillContainer>
-                <Pill icon={devicon("github")} text="GitHub" />
-            </PillContainer>
-        </Section>
+            </Section>
+            <Section header="Frameworks">
+                <PillContainer>
+                    <Pill icon={devicon("jetpackcompose", "plain")} text="Compose" />
+                    <Pill icon={devicon("astro")} text="Astro" />
+                    <Pill mono={true} icon={devicon("react")} text="React" />
+                    <Pill icon={devicon("tailwindcss")} text="TailwindCSS" />
+                </PillContainer>
+            </Section>
+            <Section header="Technologies">
+                <PillContainer>
+                    <Pill icon={devicon("linux")} text="Linux" />
+                    <Pill icon={devicon("git")} text="Git" />
+                    <Pill icon={devicon("android")} text="Android" />
+                </PillContainer>
+            </Section>
+        </div>
+    </div>
+    <div class="flex flex-col items-center p-2 xl:items-end xl:fixed xl:bottom-0 xl:right-0">
+        <p class="text-xs">
+            Copyright © 2026 Cilly Leang
+        </p>
+        <p class="text-xs">
+            <a class="text-blue-600" href="https://github.com/cillynder/pastel" target="_blank">Source Code</a>, AGPLv3
+        </p>
+        <p class="text-xs">
+        Avatar: <a class="text-blue-600" href="https://www.avogado6.com/diary2024?lightbox=dataItem-m6uqpmp07" target="_blank">もちもち</a> by <a class="text-blue-600" href="https://www.avogado6.com" target="_blank">avogado6</a>
+        </p>
     </div>
 </Layout>

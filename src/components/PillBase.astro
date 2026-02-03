@@ -1,0 +1,21 @@
+---
+interface Props {
+    mono?: boolean;
+    icon?: string;
+    text?: string;
+}
+
+const { mono = false, icon, text } = Astro.props;
+---
+<div class="inline-block">
+    <div class="flex flex-row bg-cyan shadow-md rounded-full py-2 px-4 items-center space-x-2">
+        { (icon != null)
+            ? <img class={"size-6" + (mono ? " brightness-0 saturate-100" : "")} src={icon} />
+            : <div class="size-6"><slot name="icon" /></div>
+        }
+        { (text != null)
+            ? <p class="font-semibold">{text}</p>
+            : <slot name="text" />
+        }
+    </div>
+</div>
