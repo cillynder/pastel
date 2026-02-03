@@ -10,7 +10,7 @@
 
   outputs = { pnpm2nix, flake-utils ,... }:
     flake-utils.lib.eachDefaultSystem(system: {
-      defaultPackage = pnpm2nix.packages.${system}.mkPnpmPackage {
+      packages.default = pnpm2nix.packages.${system}.mkPnpmPackage {
         name = "pastel";
         src = ./.;
         installInPlace = true;
