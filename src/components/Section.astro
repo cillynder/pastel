@@ -5,7 +5,7 @@ interface Props {
 
 const { header } = Astro.props;
 ---
-<div class="w-xl max-w-screen bg-white rounded-4xl shadow-md p-8">
+<div class="bg-white rounded-4xl shadow-md p-8 self-stretch">
     { (header != null) &&
         <h1 class="text-3xl font-semibold mb-4">{header}</h1>
     }

@@ -38,7 +38,7 @@ const devicon = (name: string, variant: string = "original") =>
 
 <Layout class="bg-gray">
     <div class="grid place-items-center grid-cols-1 xl:grid-cols-2 xl:size-full xl:overflow-hidden">
-        <div class="flex flex-col items-center p-8 space-y-4 max-w-xl">
+        <div class="flex flex-col items-center space-y-4 max-w-2xl px-8 pt-4 xl:justify-self-end">
             <Section>
                 <div class="flex flex-row space-x-4 items-center">
                     <img class="size-24 rounded-full" src="/avatar.jpg">
@@ -84,7 +84,7 @@ const devicon = (name: string, variant: string = "original") =>
                 </div>
             </Section>
         </div>
-        <div class="flex flex-col justify-center-safe p-8 space-y-4 xl:overflow-y-auto h-full">
+        <div class="flex flex-col justify-center-safe space-y-4 max-w-2xl px-8 pt-4 xl:overflow-y-auto h-full xl:justify-self-start">
             <Section header="Languages">
                 <PillContainer>
                     <Pill icon={devicon("nixos")} text="Nix" />
