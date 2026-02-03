@@ -15,7 +15,7 @@ const devicon = (name: string, variant: string = "original") =>
 ---
 
 <script>
-    const email = location.hostname == "localhost" ? "mini@cilly.moe" : "me@cilly.dev"
+    const email = location.hostname == "cilly.moe" ? "mini@cilly.moe" : "me@cilly.dev"
     const emailEle = document.getElementById("email-text")!
     emailEle.textContent = email;
     emailEle.closest("a")!.href = "mailto:" + email;
