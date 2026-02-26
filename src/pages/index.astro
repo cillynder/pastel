@@ -15,10 +15,18 @@ const devicon = (name: string, variant: string = "original") =>
 ---
 
 <script>
-    const email = location.hostname == "cilly.moe" ? "mini@cilly.moe" : "me@cilly.dev"
-    const emailEle = document.getElementById("email-text")!
+    const isMoe = location.hostname == "cilly.moe"
+    const email = isMoe ? "mini@cilly.moe" : "me@cilly.dev"
+    const name = isMoe ? "Cilly" : "Ly"
+
+    const emailEle = document.getElementById("dyn_email-text")!
     emailEle.textContent = email;
     emailEle.closest("a")!.href = "mailto:" + email;
+
+    const names = document.getElementsByClassName("dyn_name")
+    for (const nameEle of names) {
+        nameEle.textContent = name
+    }
 
     const fmt = new Intl.DateTimeFormat("en-AU", {
         timeZone: "Australia/Melbourne",
@@ -43,11 +51,11 @@ const devicon = (name: string, variant: string = "original") =>
                 <div class="flex flex-row space-x-4 items-center">
                     <img class="size-24 rounded-full" src="/avatar.jpg">
                     <div class="flex flex-col gap-2">
-                        <h1 class="text-4xl font-semibold">Cilly Leang</h1>
+                        <h1 class="text-4xl font-semibold"><span class="dyn_name">Cilly</span> Leang</h1>
                         <PillContainer>
                             <Pill url="mailto:me@cilly.dev">
                                 <Mail class="size-6 fill-black" slot="icon" />
-                                <p class="font-semibold" id="email-text" slot="text">me@cilly.dev</p>
+                                <p class="font-semibold" id="dyn_email-text" slot="text">me@cilly.dev</p>
                             </Pill>
                             <Pill icon={devicon("github")} text="GitHub" url="https://github.com/cillynder" />
                         </PillContainer>
@@ -57,7 +65,7 @@ const devicon = (name: string, variant: string = "original") =>
             <Section header="About">
                 <div class="flex flex-col">
                     <p class="text-lg">
-                    Hi! I'm Cilly, a software developer. I love working with open source projects and
+                    Hi! I'm <span class="dyn_name">Cilly</span>, a software developer. I love working with open source projects and
                     modding or reverse engineering programs.
                     <br><br>
                     I specialise in Kotlin and TypeScript projects, but I have also been learning
@@ -117,7 +125,7 @@ const devicon = (name: string, variant: string = "original") =>
     </div>
     <div class="flex flex-col items-center p-2 xl:items-end xl:fixed xl:bottom-0 xl:right-0">
         <p class="text-xs">
-            Copyright © 2026 Cilly Leang
+            Copyright © 2026 <span class="dyn_name">Cilly</span> Leang
         </p>
         <p class="text-xs">
             <a class="text-blue-600" href="https://github.com/cillynder/pastel" target="_blank">Source Code</a>, AGPLv3
